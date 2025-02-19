@@ -117,12 +117,12 @@ which is the statistical upper limit, or p-value in the HEP notation. As we will
     p(\theta) = 1 - \Phi(r^*(\theta, \hat\theta - 1)).
 \end{equation}
 
-\subsection{Poisson example as the book}
+\subsection{Poisson example as the book}\label{sec:book_example}
 In the book they explore this method using one sample from the top quark discovery, where $y=27$ and $\theta=\mu+b$ with $b=6.7$. Which when using Eq. (\ref{eq:poisson_MLE}) gives $\hat{\theta}=y$. From this they got 
 $$
 r(y,\theta) = \text{sign}(y-\theta)[2\{y\log(y/\theta)-(y-\theta)\}]^{1/2},
 $$
-and \todo{NEED TO UNDERSTAND WHY}
+and, using the canonical parametrization\footnote{See Appendix \ref{apndx:canon} for explanation}, we get the Wald statistic
 $$
 t(y,\theta)=y^{1/2}\log(y/\theta)
 $$
@@ -270,7 +270,54 @@ Another test one can conduct is to see how the p-value differs between models at
 \section{Concluision so far}
 Need NPs!!
 
- 
+\clearpage
+\appendix
+\section{Canonical parametrization, and the Wald statistic}\label{apndx:canon}
+One thing to note is that when directly applying Eq. (\ref{eq:Wald_stat}) to the example of the book in Section \ref{sec:book_example}, is that we would expect to get
+$$
+t(\theta) = \frac{y-\theta}{\sqrt{\theta}}
+$$
+However, the reason they did not arrive at this, is because they utilized the canonical parametrization of the Poisson. Which they can do since the Poisson distribution is of the Exponential family. Meaning that one can write the distribution in the form:
+$$
+f(y|\theta)=\exp\{yT(\theta)-A(\theta)+B(y)\},
+$$
+which makes for cleaner and often leads to better-behaved statistics, as one can separate the terms into "parameter" and "data"-terms. The Poisson fits this form since we can write the distribution
+$$
+\Pr(Y=y|\theta) = \frac{\theta^y e^{-\theta}}{y!}
+$$
+in the aforementioned form by using the following: \begin{table}[!ht]
+    \centering
+    \begin{tabular}{l r}
+         $T(\theta) = \tau=\log\theta$ & Canonical (or often called the natural) parameter, \\
+         $B(y)=y$ & Sufficient statistics, \\
+         $A(\tau)=e^\tau=\theta$ & log-partition function,
+    \end{tabular}
+\end{table}
+\\which makes it possible to write 
+$$
+\Pr(Y=y|\tau)=\exp\{y\tau-e^\tau-\log(y!)\}
+$$
+Making the likelihood calculation a breeze (here I will use $n=1$, but its still easy)
+$$
+\ell(\tau)=y\tau - e^\tau 
+$$
+Giving the MLE
+$$
+\hat\tau=\log(y)
+$$
+and the observed information function
+$$
+j(\hat\tau)=e^{\hat\tau} = e^{\log y} = y
+$$
+such that when set in Eq. (\ref{eq:Wald_stat}) using $\tau$ instead of $\theta$ we get
+$$
+t(\tau)=j(\hat\tau)^{1/2}(\hat\tau - \tau) = \sqrt{y}(\log(y) - \tau)
+$$
+which when changed back to $\theta$ gives
+$$
+t(\tau)= \sqrt{y}(\log(y) - \tau) \rightarrow t(\theta) = \sqrt{y}(\log(y) - \log((\theta)) =\sqrt{y}\log\left(\frac{y}{\theta}\right)
+$$
+Very quick \href{https://en.wikipedia.org/wiki/Exponential_family#Interpretation}{source} just for us :) 
 \newpage
 \printbibliography
 \end{document}
